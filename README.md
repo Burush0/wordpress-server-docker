@@ -1,7 +1,11 @@
 # wordpress-server-docker
 WordPress deployment with Docker Compose and Ngrok tunneling
 
-This is a continuation of the DevOps series, now deploying the server using Docker Compose. [Part 1](https://github.com/Burush0/wordpress-ubuntu-server) (raw step by step), [Part 2](https://github.com/Burush0/wordpress-server-bash) (bash script), [Part 3](https://github.com/Burush0/wordpress-server-ansible) (Ansible playbook with separate roles).
+This is a continuation of the DevOps series, now deploying the server using Docker Compose. 
+
+- [Part 1](https://github.com/Burush0/wordpress-ubuntu-server) (raw step by step)
+- [Part 2](https://github.com/Burush0/wordpress-server-bash) (bash script)
+- [Part 3](https://github.com/Burush0/wordpress-server-ansible) (Ansible playbook with separate roles).
 
 # Prerequisites:
 - An [Ubuntu Server](https://ubuntu.com/download/server) installation, preferably fresh. I did mine inside a VMWare Workstation virtual machine.
