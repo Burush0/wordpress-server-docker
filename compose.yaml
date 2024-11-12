@@ -1,0 +1,70 @@
+volumes:
+  dbdata:
+  wordpress:
+
+networks:
+  app-network:
+
+services:
+  db:
+    image: mysql:8.0
+    command: ["mysqld", "--default-authentication-plugin=mysql_native_password","--ssl=0"]
+    environment:
+      - MYSQL_DATABASE=wordpress
+      - MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD
+      - MYSQL_USER=$MYSQL_USER
+      - MYSQL_PASSWORD=$MYSQL_PASSWORD
+    volumes:
+      - dbdata:/var/lib/mysql
+    networks:
+      - app-network
+    ports:
+      - 3306:3306
+  
+  wordpress:
+    depends_on:
+      - db
+    image: wordpress:fpm
+    working_dir: /var/www/html/wordpress
+    environment:
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_USER: $MYSQL_USER
+      WORDPRESS_DB_PASSWORD: $MYSQL_PASSWORD
+      WORDPRESS_DB_NAME: wordpress
+      WORDPRESS_CONFIG_EXTRA: |
+        define( 'WP_HOME', "https://{$$_SERVER['HTTP_HOST']}/wordpress" );
+        define( 'WP_SITEURL', "https://{$$_SERVER['HTTP_HOST']}/wordpress");
+    volumes:
+      - wordpress:/var/www/html:wo
+    networks:
+      - app-network
+  
+  webserver:
+    depends_on:
+      - wordpress
+    image: nginx:1.27-alpine
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - wordpress:/var/www/html
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/nginx.conf
+      - ./nginx/index.html:/var/www/html/site/index.html
+      - ./ssl:/etc/ssl
+      - ./nginx/snippets:/etc/nginx/snippets
+    networks:
+      - app-network
+
+  ngrok:
+    depends_on:
+      - webserver
+    image: ngrok/ngrok
+    command:
+      - "start"
+      - "--all"
+      - "--config"
+      - "/etc/ngrok.yaml"
+    volumes:
+      - ./ngrok/ngrok.yaml:/etc/ngrok.yaml
+    networks:
+      - app-network

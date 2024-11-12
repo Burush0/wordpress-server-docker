@@ -1,0 +1,12 @@
+version: 3
+
+agent:
+  authtoken: YOUR_TOKEN_HERE
+
+tunnels:
+  app:
+    addr: webserver:443
+    proto: http
+    schemes:
+      - https
+    domain: tight-badger-oddly.ngrok-free.app
