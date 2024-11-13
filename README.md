@@ -78,13 +78,17 @@ sudo openssl req -x509 -noenc -days 365 -newkey rsa:2048 -keyout ./ssl/private/n
 sudo openssl dhparam -out ./ssl/dhparams.pem 2048
 ```
 
-### 4.4. Edit the `ngrok/ngrok.yaml` config file
+### 4.4. Edit the `nginx/nginx.conf` config file
+
+You will need to edit the server_name lines in both the HTTPS setup as well as HTTP -> HTTPS redirect, to reflect the one you specified in `/etc/hosts`.
+
+### 4.5. Edit the `ngrok/ngrok.yaml` config file
 
 There will be a line which says `YOUR_TOKEN_HERE`, guess where the token goes? You can obtain your token on the Ngrok dashboard [here](https://dashboard.ngrok.com/get-started/your-authtoken).
 
 As for the domain name, you can find your own in the "Setup & Installation" tab of the dashboard, after scrolling down a bit. You're looking for a static domain, mine is `tight-badger-oddly.ngrok-free.app`, yours will be different
 
-### 4.5. Run the compose.yaml file
+### 4.6. Run the compose.yaml file
 ```
 docker compose -f compose.yaml up -d 
 ```
